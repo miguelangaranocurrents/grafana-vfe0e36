@@ -758,7 +758,8 @@ function normalizeZone(zone: string | Zone): Zone {
   }
 
   const name = normalizeZoneName(zone);
-  if (name === 'UTC') {
+  // moment-timezone keeps unknown zones (e.g. Grafana's 'default') in UTC instead of producing an invalid date
+  if (name === 'UTC' || !IANAZone.isValidZone(name)) {
     return FixedOffsetZone.instance(0);
   }
 
